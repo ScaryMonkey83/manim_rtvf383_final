@@ -114,7 +114,7 @@ if __name__ == '__main__':
             count += 1
 
     # render the video segments
-    os.system('sh /Users/scarymonkey83/PycharmProjects/manim_rtvf383_final/multiprocess.sh /Users/scarymonkey83/PycharmProjects/manim_rtvf383_final/{}/parallel_script_list.txt {}'
+    os.system('sh ~/manim_rtvf383_final/multiprocess.sh ~/manim_rtvf383_final/{}/parallel_script_list.txt {}'
               .format(tmp, n_cores))
 
     # stitch segments together
