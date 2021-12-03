@@ -93,7 +93,7 @@ if __name__ == '__main__':
     with open('{}/parallel_script_list.txt'.format(tmp), 'w') as f:
         for start in range(0, data.shape[0], frame_rate):
             # this makes sure that the animations are smooth
-            if start + frame_rate + 1 > kick_data.size:
+            if start + frame_rate > kick_data.size:
                 stop = kick_data.size
             else:
                 stop = start + frame_rate
