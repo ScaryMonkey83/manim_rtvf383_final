@@ -94,13 +94,13 @@ class Video(ThreeDScene):
                     rate_func=rate_functions.linear
                 )
             else:
-                v0_ = pyramids[0][5].get_center() + (cp0 / np.linalg.norm(cp0)) * multiplier * drum[0] if drum[0] > 0.1 else pyramids[0][5].get_center()
-                v1_ = pyramids[1][5].get_center() + (cp1 / np.linalg.norm(cp1)) * multiplier * drum[1] if drum[1] > 0.1 else pyramids[1][5].get_center()
-                v2_ = pyramids[2][5].get_center() + (cp2 / np.linalg.norm(cp2)) * multiplier * drum[2] if drum[2] > 0.1 else pyramids[2][5].get_center()
-                v3_ = pyramids[3][5].get_center() + (cp3 / np.linalg.norm(cp3)) * multiplier * drum[3] if drum[3] > 0.1 else pyramids[3][5].get_center()
-                v4_ = pyramids[4][5].get_center() + (cp4 / np.linalg.norm(cp4)) * multiplier * drum[4] if drum[4] > 0.1 else pyramids[4][5].get_center()
-                v5_ = pyramids[5][5].get_center() + (cp5 / np.linalg.norm(cp5)) * multiplier * drum[5] if drum[5] > 0.1 else pyramids[5][5].get_center()
-                v6_ = pyramids[6][5].get_center() + (cp6 / np.linalg.norm(cp6)) * multiplier * drum[6] if drum[6] > 0.1 else pyramids[6][5].get_center()
+                v0_ = pyramids[0][5].get_center() + (cp0 / np.linalg.norm(cp0)) * multiplier * drum[0] if drum[0] > 0.4 else pyramids[0][5].get_center()
+                v1_ = pyramids[1][5].get_center() + (cp1 / np.linalg.norm(cp1)) * multiplier * drum[1] if drum[1] > 0.4 else pyramids[1][5].get_center()
+                v2_ = pyramids[2][5].get_center() + (cp2 / np.linalg.norm(cp2)) * multiplier * drum[2] if drum[2] > 0.4 else pyramids[2][5].get_center()
+                v3_ = pyramids[3][5].get_center() + (cp3 / np.linalg.norm(cp3)) * multiplier * drum[3] if drum[3] > 0.4 else pyramids[3][5].get_center()
+                v4_ = pyramids[4][5].get_center() + (cp4 / np.linalg.norm(cp4)) * multiplier * drum[4] if drum[4] > 0.4 else pyramids[4][5].get_center()
+                v5_ = pyramids[5][5].get_center() + (cp5 / np.linalg.norm(cp5)) * multiplier * drum[5] if drum[5] > 0.4 else pyramids[5][5].get_center()
+                v6_ = pyramids[6][5].get_center() + (cp6 / np.linalg.norm(cp6)) * multiplier * drum[6] if drum[6] > 0.4 else pyramids[6][5].get_center()
 
                 return v0_, v1_, v2_, v3_, v4_, v5_, v6_
 
@@ -115,10 +115,10 @@ class Video(ThreeDScene):
         if config.first:
             pyramids = [self.define_pyramid(col, loc) for (col, loc) in zip(colors, locs)]
             self.wait(4)
-            self.move_camera(0.45*np.pi, -0.05*np.pi)
+            self.move_camera(0.45*np.pi, -0.1*np.pi, zoom=0.6)
         else:
-            # if not the first, run it like this
-            self.set_camera_orientation(0.45 * np.pi, -0.05 * np.pi)
+            # if not the first chunk, run it like this
+            self.set_camera_orientation(0.45 * np.pi, -0.1 * np.pi, zoom=0.6)
             pyramids = [self.define_pyramid(col, loc) for (col, loc) in zip(colors, locs)]
             v0, v1, v2, v3, v4, v5, v6 = process_one(pyramids, data[0, :], None, play=False)
             data = data[1:, :]

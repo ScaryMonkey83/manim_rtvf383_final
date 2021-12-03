@@ -2,9 +2,6 @@ import os
 from datetime import datetime
 import pickle
 
-from cloup import (
-    command, option, option_group
-)
 import soundfile as sf
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 import numpy as np
@@ -13,10 +10,10 @@ import numpy as np
 # constants
 file = "audio"
 tmp = "tmp"
-n_cores = 12
+n_cores = 15
 window_multiplier = 4
-frame_rate = 15
-qual_flag = '-pql'
+frame_rate = 30
+qual_flag = '-ql --fps={}'.format(60)
 
 
 def var_to_file(var, path):
@@ -109,22 +106,22 @@ if __name__ == '__main__':
 
             # listening to snarky puppy figuring shit out like a boss song_title='outlier'
             if count == 0:
-                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin -first=true --media_dir={}/{}/{} main.py Video > debug/segment_{}.log\n'
+                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin -first=true --media_dir={}/{}/{} main.py Video > debug/segment_{}.log 2> /dev/null\n'
                         .format(qual_flag, tmp, count, tmp, 'media', count, count))
             else:
-                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin --media_dir={}/{}/{} main.py Video > debug/segment_{}.log\n'
+                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin --media_dir={}/{}/{} main.py Video > debug/segment_{}.log 2> /dev/null\n'
                         .format(qual_flag, tmp, count, tmp, 'media', count, count))
             count += 1
 
     # render the video segments
-    os.system('sh /Users/scarymonkey83/PycharmProjects/manim_rtvf383_final/multiprocess.sh /Users/scarymonkey83/PycharmProjects/manim_rtvf383_final/{}/parallel_script_list.txt {}'.format(tmp, n_cores))
+    os.system('sh /Users/scarymonkey83/PycharmProjects/manim_rtvf383_final/multiprocess.sh /Users/scarymonkey83/PycharmProjects/manim_rtvf383_final/{}/parallel_script_list.txt {}'
+              .format(tmp, n_cores))
 
     # stitch segments together
     clips = []
     for num in range(count):
-        media_dir = 'tmp/media/{}/videos/main/480p15/Video.mp4'
+        media_dir = 'tmp/media/{}/videos/main/480p15/Video.mp4'.format(num)
         clips.append(VideoFileClip(media_dir))
     final_video = concatenate_videoclips(clips)
     final_video.write_videofile("final_video.mp4")
-    os.system('rm -r {}'.format(tmp))
     print("Runtime = {}".format(datetime.now() - now))
