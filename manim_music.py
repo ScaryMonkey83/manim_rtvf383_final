@@ -11,9 +11,9 @@ import numpy as np
 file = "audio"
 tmp = "tmp"
 n_cores = 48
-window_multiplier = 8
+window_multiplier = 15
 frame_rate = 30
-qual_flag = '-ql --fps={}'.format(60)
+qual_flag = '-qh --fps={}'.format(60)
 
 
 def var_to_file(var, path):
