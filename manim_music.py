@@ -96,7 +96,7 @@ if __name__ == '__main__':
             if start + frame_rate + 1 > kick_data.size:
                 stop = kick_data.size
             else:
-                stop = start + frame_rate + 1
+                stop = start + frame_rate
 
             # won't err due to os/python separation (will print on stderr)
             os.system('mkdir tmp/media/{}'.format(count))
