@@ -11,7 +11,7 @@ import numpy as np
 file = "audio"
 tmp = "tmp"
 n_cores = 15
-window_multiplier = 4
+window_multiplier = 8
 frame_rate = 30
 qual_flag = '-ql --fps={}'.format(60)
 
