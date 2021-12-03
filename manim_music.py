@@ -10,7 +10,7 @@ import numpy as np
 # constants
 file = "audio"
 tmp = "tmp"
-n_cores = 15
+n_cores = 48
 window_multiplier = 8
 frame_rate = 30
 qual_flag = '-ql --fps={}'.format(60)
@@ -106,10 +106,10 @@ if __name__ == '__main__':
 
             # listening to snarky puppy figuring shit out like a boss song_title='outlier'
             if count == 0:
-                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin -first=true --media_dir={}/{}/{} main.py Video > debug/segment_{}.log 2> /dev/null\n'
+                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin -first=true --media_dir={}/{}/{} main.py Video > ~/manim_rtvf383_final/debug/segment_{}.log 2> /dev/null\n'
                         .format(qual_flag, tmp, count, tmp, 'media', count, count))
             else:
-                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin --media_dir={}/{}/{} main.py Video > debug/segment_{}.log 2> /dev/null\n'
+                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin --media_dir={}/{}/{} main.py Video > ~/manim_rtvf383_final/debug/segment_{}.log 2> /dev/null\n'
                         .format(qual_flag, tmp, count, tmp, 'media', count, count))
             count += 1
 
