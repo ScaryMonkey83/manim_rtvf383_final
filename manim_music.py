@@ -12,7 +12,7 @@ file = "audio"
 tmp = "tmp"
 n_cores = 48
 window_multiplier = 15
-frame_rate = 30
+frame_rate = 60
 qual_flag = '-qh --fps={}'.format(60)
 
 
@@ -120,7 +120,7 @@ if __name__ == '__main__':
     # stitch segments together
     clips = []
     for num in range(count):
-        media_dir = 'tmp/media/{}/videos/main/480p15/Video.mp4'.format(num)
+        media_dir = 'tmp/media/{}/videos/main/1080p60.0/Video.mp4'.format(num)
         clips.append(VideoFileClip(media_dir))
     final_video = concatenate_videoclips(clips)
     final_video.write_videofile("final_video.mp4")
