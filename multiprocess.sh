@@ -7,8 +7,8 @@
 
 if [[ $2 ]]; then
     NUM_PROCS=$2
-    < $1 gxargs -d '\n' -P $NUM_PROCS -I {} /bin/bash -c "{}"
+    < $1 xargs -d '\n' -P $NUM_PROCS -I {} /bin/bash -c "{}"
 else
     NUM_PROCS=`cat /proc/cpuinfo | awk '/^processor/{print $3}'| wc -l`
-    < $1 gxargs -d '\n' -P $NUM_PROCS -I {} /bin/bash -c "{}"
+    < $1 xargs -d '\n' -P $NUM_PROCS -I {} /bin/bash -c "{}"
 fi
