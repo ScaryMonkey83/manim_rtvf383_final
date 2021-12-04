@@ -1,7 +1,8 @@
-# manim_rtvf383_final: I did a code for a class on audio and recording techniques because I have stockholm syndrome.
+# manim_rtvf383_final: 
+## I did a code for a class on audio and recording techniques because I have stockholm syndrome.
 A multiprocessing application of manim to procedurally depict audio
 
-#### The Idea:
+### The Idea:
 Find a way to artisitically depict audio procedurally.
 
 This is a lot more ambitious than it sounds. Raw audio (WAV and AIFF etc) is stored as floating point numbers between -1 and 1. These values represent 
@@ -24,7 +25,7 @@ make the vertex of each pyramid move, we need to tell the engine to what point w
 The result is a vector that points directly up from the base. Multiplying this vector by the drum reading and adding it to the vector expressing the center
 of the base results in the movement of the entire pyramid. This can be seen in the function process_one (line 72 main.py)
 
-#### The Problem:
+### The Problem:
 Thought Bubble: "Holy shit how does manim use a single core? It took two hours to render one second of sound."
 
 This is where I got in way over my head.
@@ -36,7 +37,7 @@ There is this concept in computer science called compartmentalization or "black 
 time it is asked. If it fails, that certain thing is the only thing that needs to be fixed. This is fantastic when everything works, less-so in the obverse. 
 When an upgrade involves a fundamental change in paradigm, it can be very difficult to determine how many things need to be changed.
 
-#### Paradigm change: Multiprocessing
+### Paradigm change: Multiprocessing
 Moore's law is dead. Single core processing is slow. Really slow. In order to utilize the full capability of any modern computer, written code should be written 
 to run on multiple processors at the same time. Just about every computer ships with at least two processors. Mine has sixteen and right now the program only uses
 one. 
@@ -57,7 +58,7 @@ to pass into main.py
 
 After all this, it still took nineteen hours to process 89 seconds of video on my sixteen core laptop and I was running out of time.
 
-#### Paradigm change: Cloud Computing
+### Paradigm change: Cloud Computing
 Fuck it- we are deploying it to the cloud. AWS has virtual machines with all sorts of processing power. I opted for a 48 core vm costing $1.819/hr of usage. 
 
 Cloud computing offers some pretty unique challenges. You are literally running code on a computer that doesn't exist located hundreds of miles from you. Things
@@ -69,7 +70,7 @@ challenging. Virtual machines do not ship with all the software you need install
 
 Finally, it ran in four hours.
 
-#### Underwhelming. Why is this cool?
+### Underwhelming. Why is this cool?
 Because we never have to do it again. I could slightly modify the animation method Video.construct() (line 71 main.py) and make my pyramids spin. You could clone 
 the project and make your pyramids sit in a heptagon. Either way, it will only take four hours to render. We could use different audio files and as long as there
 are seven audio files and they are the same length the program which originally took two hours to run one second of render will take four hours to do the whole 89
