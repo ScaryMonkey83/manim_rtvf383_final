@@ -171,14 +171,14 @@ class Video(ThreeDScene):
         [[all_the_points.append(point) for point in pyramid] for pyramid in pyramids1]
         [[all_the_points.append(point) for point in pyramid] for pyramid in pyramids2]
         if not config.first:
-            rotate(*all_the_points, c(rot_speed * drum_idx), animate=False)
+            rotate(*all_the_points, rotation_mat=c(rot_speed * drum_idx), animate=False)
 
         for sample in range(data.shape[0]):
             # sample = sample + int(2 * data.shape[0] / 3)
             d = data[sample, :]
             p1 = process_one(pyramids1, d, None)
             p2 = process_one(pyramids2, d, None, inv=True)
-            p3 = rotate(*all_the_points, c(rot_speed))
+            p3 = rotate(*all_the_points, rotation_mat=c(rot_speed))
             self.play(
                 *p1,
                 *p2,
