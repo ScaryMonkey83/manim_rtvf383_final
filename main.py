@@ -80,10 +80,10 @@ class Video(ThreeDScene):
             do = []
             if animate:
                 for point in points:
-                    do.append(point.animate.move_to(np.matmul(point.get_center, rotation_mat)))
+                    do.append(point.animate.move_to(np.matmul(rotation_mat, point.get_center())))
             else:
                 for point in points:
-                    point.move_to(np.matmul(point.get_center, rotation_mat))
+                    point.move_to(np.matmul(rotation_mat, point.get_center()))
             return do
 
         def process_one(pyramids: List[List[Sphere]], drum, rand_func, play=True, inv=False):
