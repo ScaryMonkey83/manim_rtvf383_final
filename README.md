@@ -1,5 +1,5 @@
 # manim_rtvf383_final: 
-## I did a code for a class on audio and recording techniques because I have stockholm syndrome.
+## I did a code for a class on audio and recording techniques because I have stockholm syndrome. Here's a high-level explanation:
 A multiprocessing application of manim to procedurally depict audio
 
 ### The Idea:
