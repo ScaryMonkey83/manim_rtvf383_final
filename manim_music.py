@@ -11,7 +11,7 @@ import numpy as np
 file = "audio"
 tmp = "tmp"
 n_cores = 48
-window_multiplier = 15
+window_multiplier = 6
 frame_rate = 60
 qual_flag = '-qh --fps={}'.format(60)
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
             os.system('mkdir tmp/media/{}'.format(count))
 
             # write chunk to file
-            var_to_file(data[start:stop, :], "{}/{}data.bin".format(tmp, count))
+            var_to_file((start, data[start:stop, :]), "{}/{}data.bin".format(tmp, count))
 
             # listening to snarky puppy figuring shit out like a boss song_title='outlier'
             if count == 0:
