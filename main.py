@@ -174,8 +174,6 @@ class Video(ThreeDScene):
             for vec in range(len(p2)):
                 transformations[pyramids1[vec][4]] += p2[vec]
 
-            for p in transformations:
-                print(transformations[p])
             # animating each transformation
             animations = [point.animate.move_to(transformations[point]) for point in transformations]
             self.play(
