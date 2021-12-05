@@ -164,7 +164,7 @@ class Video(ThreeDScene):
 
         for sample in range(data.shape[0]):
             # transformations to make
-            transformations = {point: np.array([0, 0, 0]) for point in all_the_points}
+            transformations = {point: np.array([0.0, 0.0, 0.0]) for point in all_the_points}
             d = data[sample, :]
             p1 = process_one(pyramids1, d, None)
             for vec in range(len(p1)):
