@@ -1,5 +1,6 @@
 import logging
 from math import sin, cos
+import functools as ft
 
 import soundfile as sf
 from manim import *
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 # also constants
 circumference = 3
 multiplier = 7
-rot_speed = 0.0075
+rot_speed = 0.005
 
 # constant lists
 colors = [RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, WHITE]
@@ -172,10 +173,10 @@ class Video(ThreeDScene):
                 transformations[pyramids1[vec][4]] += p1[vec]
             p2 = process_one(pyramids2, d, None, inv=True)
             for vec in range(len(p2)):
-                transformations[pyramids1[vec][4]] += p2[vec]
+                transformations[pyramids2[vec][4]] += p2[vec]
 
             # animating each transformation
-            animations = [point.animate.move_to(transformations[point]) for point in transformations]
+            animations = [ft.partial(point.animate.move_to, transformations[point]) for point in transformations]
             self.play(
                 *animations,
                 run_time=1 / frame_rate,
