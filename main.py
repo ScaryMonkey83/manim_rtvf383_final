@@ -104,13 +104,13 @@ class Video(ThreeDScene):
                            pyramids[6][3].get_center() - pyramids[6][0].get_center())
 
             # add the resulting unit vector to the center point on the base for each pyramid and animate it!
-            loc1 = pyramids[0][5].get_center() + (cp0 / np.linalg.norm(cp0)) * multiplier * (-drum[0] if inv else drum[0])
-            loc2 = pyramids[1][5].get_center() + (cp1 / np.linalg.norm(cp1)) * multiplier * (-drum[1] if inv else drum[1])
-            loc3 = pyramids[2][5].get_center() + (cp2 / np.linalg.norm(cp2)) * multiplier * (-drum[2] if inv else drum[2])
-            loc4 = pyramids[3][5].get_center() + (cp3 / np.linalg.norm(cp3)) * multiplier * (-drum[3] if inv else drum[3])
-            loc5 = pyramids[4][5].get_center() + (cp4 / np.linalg.norm(cp4)) * multiplier * (-drum[4] if inv else drum[4])
-            loc6 = pyramids[5][5].get_center() + (cp5 / np.linalg.norm(cp5)) * multiplier * (-drum[5] if inv else drum[5])
-            loc7 = pyramids[6][5].get_center() + (cp6 / np.linalg.norm(cp6)) * multiplier * (-drum[6] if inv else drum[6])
+            loc1 = (cp0 / np.linalg.norm(cp0)) * multiplier * (-drum[0] if inv else drum[0])
+            loc2 = (cp1 / np.linalg.norm(cp1)) * multiplier * (-drum[1] if inv else drum[1])
+            loc3 = (cp2 / np.linalg.norm(cp2)) * multiplier * (-drum[2] if inv else drum[2])
+            loc4 = (cp3 / np.linalg.norm(cp3)) * multiplier * (-drum[3] if inv else drum[3])
+            loc5 = (cp4 / np.linalg.norm(cp4)) * multiplier * (-drum[4] if inv else drum[4])
+            loc6 = (cp5 / np.linalg.norm(cp5)) * multiplier * (-drum[5] if inv else drum[5])
+            loc7 = (cp6 / np.linalg.norm(cp6)) * multiplier * (-drum[6] if inv else drum[6])
 
             return loc1, loc2, loc3, loc4, loc5, loc6, loc7
 
@@ -164,17 +164,15 @@ class Video(ThreeDScene):
 
         for sample in range(data.shape[0]):
             # transformations to make
-            transformations = {point: np.array([0.0, 0.0, 0.0]) for point in all_the_points}
             d = data[sample, :]
+            p3 = rotate(*all_the_points, rotation_mat=c(rot_speed))
+            transformations = {all_the_points[point]: p3[point] for point in range(len(all_the_points))}
             p1 = process_one(pyramids1, d, None)
             for vec in range(len(p1)):
                 transformations[pyramids1[vec][4]] += p1[vec]
             p2 = process_one(pyramids2, d, None, inv=True)
             for vec in range(len(p2)):
                 transformations[pyramids1[vec][4]] += p2[vec]
-            p3 = rotate(*all_the_points, rotation_mat=c(rot_speed))
-            for vec in range(len(p3)):
-                transformations[all_the_points[vec]] += p3[vec]
 
             for p in transformations:
                 print(transformations[p])
