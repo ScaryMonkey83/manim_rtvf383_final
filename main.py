@@ -176,7 +176,7 @@ class Video(ThreeDScene):
                 transformations[pyramids2[vec][4]] += p2[vec]
 
             # animating each transformation
-            animations = [ft.partial(point.animate.move_to, transformations[point]) for point in transformations]
+            animations = [point.animate.move_to(transformations[point]) for point in transformations]
             self.play(
                 *animations,
                 run_time=1 / frame_rate,
