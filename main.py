@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 
 # also constants
 circumference = 3
-multiplier = 3
-rot_speed = 0.05
+multiplier = 7
+rot_speed = 0.0075
 
 # constant lists
 colors = [RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, WHITE]
@@ -80,7 +80,7 @@ class Video(ThreeDScene):
             do = []
             if animate:
                 for point in points:
-                    do.append(point.animate.move_to(np.matmul(rotation_mat, point.get_center())))
+                    do.append(np.matmul(rotation_mat, point.get_center()))
             else:
                 for point in points:
                     point.move_to(np.matmul(rotation_mat, point.get_center()))
@@ -112,18 +112,7 @@ class Video(ThreeDScene):
             loc6 = pyramids[5][5].get_center() + (cp5 / np.linalg.norm(cp5)) * multiplier * (-drum[5] if inv else drum[5])
             loc7 = pyramids[6][5].get_center() + (cp6 / np.linalg.norm(cp6)) * multiplier * (-drum[6] if inv else drum[6])
 
-            if play:
-                return [
-                    pyramids[0][4].animate.move_to(loc1),
-                    pyramids[1][4].animate.move_to(loc2),
-                    pyramids[2][4].animate.move_to(loc3),
-                    pyramids[3][4].animate.move_to(loc4),
-                    pyramids[4][4].animate.move_to(loc5),
-                    pyramids[5][4].animate.move_to(loc6),
-                    pyramids[6][4].animate.move_to(loc7)
-                ]
-            else:
-                return loc1, loc2, loc3, loc4, loc5, loc6, loc7
+            return loc1, loc2, loc3, loc4, loc5, loc6, loc7
 
         # load designated data
         drum_idx: int
@@ -174,15 +163,23 @@ class Video(ThreeDScene):
             rotate(*all_the_points, rotation_mat=c(rot_speed * drum_idx), animate=False)
 
         for sample in range(data.shape[0]):
-            # sample = sample + int(2 * data.shape[0] / 3)
+            # transformations to make
+            transformations = {point: np.array([0, 0, 0]) for point in all_the_points}
             d = data[sample, :]
             p1 = process_one(pyramids1, d, None)
+            for vec in range(len(p1)):
+                transformations[pyramids1[vec][4]] += p1[vec]
             p2 = process_one(pyramids2, d, None, inv=True)
+            for vec in range(len(p2)):
+                transformations[pyramids1[vec][4]] += p2[vec]
             p3 = rotate(*all_the_points, rotation_mat=c(rot_speed))
+            for vec in range(len(p3)):
+                transformations[all_the_points[vec]] += p3[vec]
+
+            # animating each transformation
+            animations = [point.animation.move_to(transformations[point]) for point in transformations]
             self.play(
-                *p1,
-                *p2,
-                *p3,
+                *animations,
                 run_time=1 / frame_rate,
                 rate_func=rate_functions.linear
             )

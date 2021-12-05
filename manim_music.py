@@ -11,8 +11,8 @@ import numpy as np
 file = "audio"
 tmp = "tmp"
 n_cores = 48
-window_multiplier = 6
-frame_rate = 60
+window_multiplier = 4
+frame_rate = 20
 qual_flag = '-qh --fps={}'.format(60)
 
 
@@ -90,13 +90,14 @@ if __name__ == '__main__':
 
     # chunking for processes
     count = 0
+    step_sz = int(frame_rate / 2)
     with open('{}/parallel_script_list.txt'.format(tmp), 'w') as f:
-        for start in range(0, data.shape[0], frame_rate):
+        for start in range(0, data.shape[0], step_sz):
             # this makes sure that the animations are smooth
-            if start + frame_rate > kick_data.size:
+            if start + step_sz > kick_data.size:
                 stop = kick_data.size
             else:
-                stop = start + frame_rate
+                stop = start + step_sz
 
             # won't err due to os/python separation (will print on stderr)
             os.system('mkdir tmp/media/{}'.format(count))
