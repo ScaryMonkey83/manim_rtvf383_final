@@ -176,8 +176,10 @@ class Video(ThreeDScene):
             for vec in range(len(p3)):
                 transformations[all_the_points[vec]] += p3[vec]
 
+            for p in transformations:
+                print(transformations[p])
             # animating each transformation
-            animations = [point.animation.move_to(transformations[point]) for point in transformations]
+            animations = [point.animate.move_to(transformations[point]) for point in transformations]
             self.play(
                 *animations,
                 run_time=1 / frame_rate,
