@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # also constants
 circumference = 3
-multiplier = 7
+multiplier = 4
 rot_speed = 0.005
 
 # constant lists
@@ -140,21 +140,21 @@ class Video(ThreeDScene):
             v0_2, v1_2, v2_2, v3_2, v4_2, v5_2, v6_2 = process_one(pyramids2, data[0, :], None, play=False, inv=True)
             data = data[1:, :]
 
-            pyramids1[0][4].move_to(v0_1)
-            pyramids1[1][4].move_to(v1_1)
-            pyramids1[2][4].move_to(v2_1)
-            pyramids1[3][4].move_to(v3_1)
-            pyramids1[4][4].move_to(v4_1)
-            pyramids1[5][4].move_to(v5_1)
-            pyramids1[6][4].move_to(v6_1)
+            pyramids1[0][4].move_to(pyramids1[0][5].get_center() + v0_1)
+            pyramids1[1][4].move_to(pyramids1[1][5].get_center() + v1_1)
+            pyramids1[2][4].move_to(pyramids1[2][5].get_center() + v2_1)
+            pyramids1[3][4].move_to(pyramids1[3][5].get_center() + v3_1)
+            pyramids1[4][4].move_to(pyramids1[4][5].get_center() + v4_1)
+            pyramids1[5][4].move_to(pyramids1[5][5].get_center() + v5_1)
+            pyramids1[6][4].move_to(pyramids1[6][5].get_center() + v6_1)
 
-            pyramids2[0][4].move_to(v0_2)
-            pyramids2[1][4].move_to(v1_2)
-            pyramids2[2][4].move_to(v2_2)
-            pyramids2[3][4].move_to(v3_2)
-            pyramids2[4][4].move_to(v4_2)
-            pyramids2[5][4].move_to(v5_2)
-            pyramids2[6][4].move_to(v6_2)
+            pyramids2[0][4].move_to(pyramids2[0][5].get_center() + v0_2)
+            pyramids2[1][4].move_to(pyramids2[1][5].get_center() + v1_2)
+            pyramids2[2][4].move_to(pyramids2[2][5].get_center() + v2_2)
+            pyramids2[3][4].move_to(pyramids2[3][5].get_center() + v3_2)
+            pyramids2[4][4].move_to(pyramids2[4][5].get_center() + v4_2)
+            pyramids2[5][4].move_to(pyramids2[5][5].get_center() + v5_2)
+            pyramids2[6][4].move_to(pyramids2[6][5].get_center() + v6_2)
 
         # main loop
         all_the_points = []
