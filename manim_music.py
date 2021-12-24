@@ -94,10 +94,10 @@ if __name__ == '__main__':
     with open('{}/parallel_script_list.txt'.format(tmp), 'w') as f:
         for start in range(0, data.shape[0], step_sz):
             # this makes sure that the animations are smooth
-            if start + step_sz > kick_data.size:
+            if start + step_sz + 1 > kick_data.size:
                 stop = kick_data.size
             else:
-                stop = start + step_sz
+                stop = start + step_sz + 1
 
             # won't err due to os/python separation (will print on stderr)
             os.system('mkdir tmp/media/{}'.format(count))
