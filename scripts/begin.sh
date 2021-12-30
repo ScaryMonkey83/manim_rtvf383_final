@@ -1,2 +1,2 @@
-mkdir "jobs"
-echo "done"
+source venv/bin/activate
+bash tmp/cmd.txt

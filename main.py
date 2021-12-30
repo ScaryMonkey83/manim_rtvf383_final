@@ -1,12 +1,21 @@
 import logging
 from math import sin, cos
-import functools as ft
+from os import environ as env
 
-import soundfile as sf
+import boto3
 from manim import *
 import numpy as np
-from manim._config import config
-from manim_music import frame_rate, file_to_var
+import boto3 as aws
+from botocore.exceptions import ClientError
+
+# these are constants
+from manim_music import (
+    frame_rate,
+    file_to_var,
+    s3_bucket,
+    aws_region
+)
+
 
 logger = logging.getLogger(__name__)
 
@@ -115,17 +124,43 @@ class Video(ThreeDScene):
 
             return loc1, loc2, loc3, loc4, loc5, loc6, loc7
 
-        # load designated data
+        #####################################################################################
+        ## Unlike previously, required chunking data is not loaded in using the manim cli. ##
+        ## Instead, all data is packaged into a binary file via AWS S3 and unpackaged via  ##
+        ## boto3. This allows a simple cli for batch processing.                           ##
+        #####################################################################################
+
+        # load designated data from s3 bucket
+        first: bool
         drum_idx: int
         data: np.ndarray
-        drum_idx, data = file_to_var(config.music_file)
+
+        # the job id dictates which chunk this job will process
+        job_id = env.get('AWS_BATCH_JOB_ID')
+        s3_key = f'tmp/{job_id}data.bin'
+
+        aws_session = aws.Session()
+        s3_resource = aws_session.resource('s3', aws_region)
+        s3_object = s3_resource.Bucket(s3_bucket).Object(s3_key)
+
+        os.mkdir('tmp')  # todo: unsure if this will fail if tmp exists
+        tmp_file = f'/tmp/{job_id}'
+        try:
+            s3_object.download_file(tmp_file)
+        except ClientError as e:
+            raise e
+
+        # todo: make sure first is loaded into bin file in manim_music.py
+        first, drum_idx, data = file_to_var(tmp_file)
+        os.rmdir('tmp')
+        #####################################################################################
 
         # init scene data
         light = self.camera.light_source
         light.move_to([-25, -20, 20])
 
-        # introduction
-        if config.first:
+        if first:
+            # introduction
             self.set_camera_orientation(0, 0, zoom=4)
             pyramids1 = [self.define_pyramid(col, loc) for (col, loc) in zip(colors, locs)]
             pyramids2 = [self.define_pyramid(col, loc + 4 * OUT) for (col, loc) in zip(colors, locs)]
@@ -160,7 +195,7 @@ class Video(ThreeDScene):
         all_the_points = []
         [[all_the_points.append(point) for point in pyramid] for pyramid in pyramids1]
         [[all_the_points.append(point) for point in pyramid] for pyramid in pyramids2]
-        if not config.first:
+        if not first:
             rotate(*all_the_points, rotation_mat=c(rot_speed * drum_idx), animate=False)
 
         for sample in range(data.shape[0]):

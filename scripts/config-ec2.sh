@@ -8,14 +8,14 @@ export AWS_DEFAULT_REGION=us-east-2
 
 sudo apt update
 sudo apt-get install -y libsdl-pango-dev
-sudo apt-get install python3.9
-sudo apt install python3.9-venv
-sudo apt-get install g++
-sudo apt-get install python3.9-dev
-sudo apt install libav-tools
-sudo apt install ffmpeg
-sudo apt-get install inotify-tools
-sudo apt-get install awscli
+sudo apt-get install -y python3.9
+sudo apt install -y python3.9-venv
+sudo apt-get install -y g++
+sudo apt-get install -y python3.9-dev
+sudo apt install -y libav-tools
+sudo apt install -y ffmpeg
+sudo apt-get install -y inotify-tools
+sudo apt-get install -y awscli
 
 git clone https://github.com/ScaryMonkey83/manim_rtvf383_final.git
 cd ~/manim_rtvf383_final/ || exit 1

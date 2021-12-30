@@ -5,15 +5,20 @@ import pickle
 import soundfile as sf
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 import numpy as np
+import boto3 as aws
 
 
 # constants
-file = "audio"
+audio_files = "audio"
 tmp = "tmp"
 n_cores = 48
 window_multiplier = 4
 frame_rate = 20
 qual_flag = '-qh --fps={}'.format(60)
+
+# AWS constants
+s3_bucket = 'manim-chunks'
+aws_region = 'us-east-2'
 
 
 def var_to_file(var, path):
@@ -43,13 +48,18 @@ if __name__ == '__main__':
     # fs setup
     os.system('mkdir debug')
     os.system('mkdir {}'.format(tmp))
-    os.system('mkdir {}/media'.format(tmp))
-    dirs = os.listdir(file)
+    # os.system('mkdir {}/media'.format(tmp))
+    dirs = os.listdir(audio_files)
     f = []
     for d in dirs:
         if d[-3:] == 'aif':
             f.append(d)
     dirs = f
+
+    # generate the python cmd that will be run inside docker container
+    with open(f'{tmp}/cmd.txt', 'w') as f:
+        f.write('python -m manim {} --disable_caching main.py Video > ~/manim_rtvf383_final/debug/segment_"$AWS_BATCH_JOB_ID".log 2> /dev/null'
+                .format(qual_flag))
 
     # load data as sample information kept in np.array
     kick_data, samplerate = sf.read('audio/{}'.format(dirs[5]))
@@ -84,45 +94,52 @@ if __name__ == '__main__':
     ##      data: np.ndarray (n_samples / (samplerate / frame_rate), 7)         ##
     ##############################################################################
 
-    # printing shape of data to confirm that the quantity at line 86 is appx num_seconds
+    # printing shape of data to confirm that (data.shape[0] - data.shape[0] % frame_rate) / frame_rate =appx= num_seconds
     print(data.shape)
     print((data.shape[0] - data.shape[0] % frame_rate) / frame_rate)
 
     # chunking for processes
     count = 0
     step_sz = int(frame_rate / 2)
-    with open('{}/parallel_script_list.txt'.format(tmp), 'w') as f:
-        for start in range(0, data.shape[0], step_sz):
-            # this makes sure that the animations are smooth
-            if start + step_sz + 1 > kick_data.size:
-                stop = kick_data.size
-            else:
-                stop = start + step_sz + 1
+    for start in range(0, data.shape[0], step_sz):
+        # this makes sure that the animations are smooth
+        if start + step_sz + 1 > kick_data.size:
+            stop = kick_data.size
+        else:
+            stop = start + step_sz + 1
 
-            # won't err due to os/python separation (will print on stderr)
-            os.system('mkdir tmp/media/{}'.format(count))
+        # won't err due to os/python separation (will print on stderr)
+        # os.system('mkdir tmp/media/{}'.format(count))
 
-            # write chunk to file
-            var_to_file((start, data[start:stop, :]), "{}/{}data.bin".format(tmp, count))
+        # write chunk to file
+        var_to_file((True if count == 0 else False, start, data[start:stop, :]), "{}/{}data.bin".format(tmp, count))
 
-            # listening to snarky puppy figuring shit out like a boss song_title='outlier'
-            if count == 0:
-                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin -first=true --media_dir={}/{}/{} main.py Video > ~/manim_rtvf383_final/debug/segment_{}.log 2> /dev/null\n'
-                        .format(qual_flag, tmp, count, tmp, 'media', count, count))
-            else:
-                f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin --media_dir={}/{}/{} main.py Video > ~/manim_rtvf383_final/debug/segment_{}.log 2> /dev/null\n'
-                        .format(qual_flag, tmp, count, tmp, 'media', count, count))
-            count += 1
+        # listening to virtual riot figuring shit out like a boss song_title='Dreaming'
+        # todo: unsure if this is needed
+        # if count == 0:
+        #     f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin -first=true --media_dir={}/{}/{} main.py Video > ~/manim_rtvf383_final/debug/segment_{}.log 2> /dev/null\n'
+        #             .format(qual_flag, tmp, count, tmp, 'media', count, count))
+        # else:
+        #     f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin --media_dir={}/{}/{} main.py Video > ~/manim_rtvf383_final/debug/segment_{}.log 2> /dev/null\n'
+        #             .format(qual_flag, tmp, count, tmp, 'media', count, count))
+        count += 1
 
-    # render the video segments
-    os.system('bash ~/manim_rtvf383_final/multiprocess.sh ~/manim_rtvf383_final/{}/parallel_script_list.txt {}'
-              .format(tmp, n_cores))
+    # # render the video segments
+    # os.system('bash ~/manim_rtvf383_final/multiprocess.sh ~/manim_rtvf383_final/{}/parallel_script_list.txt {}'
+    #           .format(tmp, n_cores))
+    #
+    # # stitch segments together
+    # clips = []
+    # for num in range(count):
+    #     media_dir = 'tmp/media/{}/videos/main/1080p60.0/Video.mp4'.format(num)
+    #     clips.append(VideoFileClip(media_dir))
+    # final_video = concatenate_videoclips(clips)
+    # final_video.write_videofile("final_video.mp4")
 
-    # stitch segments together
-    clips = []
-    for num in range(count):
-        media_dir = 'tmp/media/{}/videos/main/1080p60.0/Video.mp4'.format(num)
-        clips.append(VideoFileClip(media_dir))
-    final_video = concatenate_videoclips(clips)
-    final_video.write_videofile("final_video.mp4")
+    s3 = aws.client('s3')
+    for source, dirs, files in os.walk(tmp):
+        for filename in files:
+            local_file = os.path.join(source, filename)
+            print('  Uploading ' + local_file + ' as ' + s3_bucket + '/' + local_file)
+            s3.upload_file(local_file, s3_bucket, local_file)
     print("Runtime = {}".format(datetime.now() - now))
