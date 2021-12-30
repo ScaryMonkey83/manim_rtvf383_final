@@ -21,16 +21,16 @@ RUN apt-get install -y python3.9
 RUN apt-get install -y python3.9-venv
 RUN apt-get install -y g++
 RUN apt-get install -y python3.9-dev
-# RUN apt install -y libav-tools
 RUN apt-get install -y ffmpeg
 RUN apt-get install -y inotify-tools
 RUN apt-get install -y awscli
 RUN apt-get install -y git
 
-# todo: merge continuation branch with master so this *actually* retrieves the latest
 # clone the repo holding the code and remove the venv modifications
 RUN git clone https://github.com/ScaryMonkey83/manim_rtvf383_final.git
 WORKDIR manim_rtvf383_final
+RUN git checkout origin/continuation
+RUN ls
 RUN rm -r venv
 
 # install python virtual environment
@@ -44,9 +44,9 @@ RUN source venv/bin/activate && pip install -r requirements.txt
 RUN mkdir debug
 
 # run the actual thing
+# todo: this needs to be in a CMD ?????
 RUN source venv/bin/activate && \
-    python -m manim -qh --fps=60 --disable_caching main.py Video > \
-      "~/manim_rtvf383_final/debug/segment_$AWS_BATCH_JOB_ID.log" 2> /dev/null
+    python -m manim -qh --fps=60 --disable_caching main.py Video
 
 # update venv with manim cli changes
 # RUN git checkout origin/master -- venv/lib/python3.9/site-packages/manim/cli/render/render_options.py
