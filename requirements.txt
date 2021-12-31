@@ -10,7 +10,7 @@ colorama==0.4.4
 colour==0.1.5
 commonmark==0.9.1
 Cython==0.29.24
-decorator==4.4.2
+decorator>=4.4.2
 glcontext==2.3.4
 idna==3.3
 imageio==2.13.0
