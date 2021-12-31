@@ -32,9 +32,6 @@ WORKDIR manim_rtvf383_final
 RUN git checkout origin/continuation
 RUN rm -r venv
 
-# this file causes versioning issues and is not needed in each node anyway.
-RUN rm manim_music.py
-
 # install python virtual environment
 RUN python3.9 -m venv venv
 RUN source venv/bin/activate && pip install wheel
