@@ -30,8 +30,10 @@ RUN apt-get install -y git
 RUN git clone https://github.com/ScaryMonkey83/manim_rtvf383_final.git
 WORKDIR manim_rtvf383_final
 RUN git checkout origin/continuation
-RUN ls
 RUN rm -r venv
+
+# this file causes versioning issues and is not needed in each node anyway.
+RUN rm manim_music.py
 
 # install python virtual environment
 RUN python3.9 -m venv venv

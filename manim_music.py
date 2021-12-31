@@ -3,18 +3,18 @@ from datetime import datetime
 import pickle
 
 import soundfile as sf
-from moviepy.editor import VideoFileClip, concatenate_videoclips
 import numpy as np
 import boto3 as aws
+# todo: from moviepy.editor import VideoFileClip, concatenate_videoclips
+#       this will likely end up in a different script with its own requirements.txt
+#       to prevent dependency collision.
 
 
 # constants
 audio_files = "audio"
 tmp = "tmp"
-n_cores = 48
 window_multiplier = 4
 frame_rate = 20
-qual_flag = '-qh --fps={}'.format(60)
 
 # AWS constants
 s3_bucket = 'manim-chunks'
@@ -55,11 +55,6 @@ if __name__ == '__main__':
         if d[-3:] == 'aif':
             f.append(d)
     dirs = f
-
-    # generate the python cmd that will be run inside docker container
-    with open(f'{tmp}/cmd.txt', 'w') as f:
-        f.write('python -m manim {} --disable_caching main.py Video > ~/manim_rtvf383_final/debug/segment_"$AWS_BATCH_JOB_ID".log 2> /dev/null'
-                .format(qual_flag))
 
     # load data as sample information kept in np.array
     kick_data, samplerate = sf.read('audio/{}'.format(dirs[5]))
