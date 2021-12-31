@@ -43,12 +43,4 @@ RUN source venv/bin/activate && pip install -r requirements.txt
 RUN mkdir debug
 
 # run the actual thing
-# todo: this needs to be in a CMD ?????
-RUN source venv/bin/activate && \
-    python -m manim -qh --fps=60 --disable_caching main.py Video
-
-# update venv with manim cli changes
-# RUN git checkout origin/master -- venv/lib/python3.9/site-packages/manim/cli/render/render_options.py
-# RUN git checkout origin/master -- venv/lib/python3.9/site-packages/manim/cli/render/commands.py
-
-CMD ["echo", "finished"]
+CMD ["bash", "scripts/begin.sh"]

@@ -161,6 +161,7 @@ class Video(ThreeDScene):
 
         if first:
             # introduction
+            # todo: this should be its own chunk for speed.m
             self.set_camera_orientation(0, 0, zoom=4)
             pyramids1 = [self.define_pyramid(col, loc) for (col, loc) in zip(colors, locs)]
             pyramids2 = [self.define_pyramid(col, loc + 4 * OUT) for (col, loc) in zip(colors, locs)]
