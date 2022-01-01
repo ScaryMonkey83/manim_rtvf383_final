@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 import pickle
+import json
 
 import soundfile as sf
 import numpy as np
@@ -19,6 +20,7 @@ frame_rate = 20
 # AWS constants
 s3_bucket = 'manim-chunks'
 aws_region = 'us-east-2'
+bucket_audio_files = 'audio/{}'
 
 
 def var_to_file(var, path):
@@ -36,9 +38,13 @@ def window_rms(a, window_sz):
     window = np.ones(window_sz) / float(window_sz)
     return np.sqrt(np.convolve(a2, window, 'valid'))
 
+def download_audio_file_from_s3(s3_bucket_obj, s3_source_file, destination_dir):
+    s3_bucket_obj.Object(s3_source_file).download_file(destination_dir)
+    return sf.read('{}'.format(destination_dir))
+
 
 # constructs the video from audio asynchronously
-if __name__ == '__main__':
+def main():
     now = datetime.now()
 
     # remove files before fs setup
@@ -46,24 +52,42 @@ if __name__ == '__main__':
     os.system('rm -r tmp')
 
     # fs setup
-    os.system('mkdir debug')
-    os.system('mkdir {}'.format(tmp))
-    # os.system('mkdir {}/media'.format(tmp))
-    dirs = os.listdir(audio_files)
-    f = []
-    for d in dirs:
-        if d[-3:] == 'aif':
-            f.append(d)
-    dirs = f
+    try:
+        os.mkdir('debug')
+    except FileExistsError:
+        pass
+    try:
+        os.mkdir('audio')
+    except FileExistsError:
+        pass
+    try:
+        os.mkdir('tmp')
+    except FileExistsError:
+        pass
+
+    # a client for the s3 service
+    s3 = aws.client('s3')
+
+    # find  the 7 audio files and stick it in a list.
+    response = s3.list_objects_v2(
+        Bucket=s3_bucket,
+        Prefix='audio/',
+        MaxKeys=7)
+    dirs = [d['Key'] for d in response['Contents']]
+
+    # the s3 bucket pointer
+    aws_session = aws.Session()
+    s3_resource = aws_session.resource('s3', aws_region)
+    s3_bucket_ref = s3_resource.Bucket(s3_bucket)
 
     # load data as sample information kept in np.array
-    kick_data, samplerate = sf.read('audio/{}'.format(dirs[5]))
-    snare_data, _         = sf.read('audio/{}'.format(dirs[6]))
-    tom_h_data, _         = sf.read('audio/{}'.format(dirs[1]))
-    tom_m_data, _         = sf.read('audio/{}'.format(dirs[4]))
-    tom_l_data, _         = sf.read('audio/{}'.format(dirs[3]))
-    ohl_data, _           = sf.read('audio/{}'.format(dirs[2]))
-    ohr_data, _           = sf.read('audio/{}'.format(dirs[0]))
+    kick_data, samplerate = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[5]), '{}'.format(dirs[5]))
+    snare_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[6]), '{}'.format(dirs[6]))
+    tom_h_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[1]), '{}'.format(dirs[1]))
+    tom_m_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[4]), '{}'.format(dirs[4]))
+    tom_l_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[3]), '{}'.format(dirs[3]))
+    ohl_data, _           = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[2]), '{}'.format(dirs[2]))
+    ohr_data, _           = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[0]), '{}'.format(dirs[0]))
 
     # convert from samples to db using local root mean square convolution
     kick_data  = window_rms(kick_data, samplerate / (frame_rate * window_multiplier))
@@ -89,9 +113,7 @@ if __name__ == '__main__':
     ##      data: np.ndarray (n_samples / (samplerate / frame_rate), 7)         ##
     ##############################################################################
 
-    # printing shape of data to confirm that (data.shape[0] - data.shape[0] % frame_rate) / frame_rate =appx= num_seconds
-    print(data.shape)
-    print((data.shape[0] - data.shape[0] % frame_rate) / frame_rate)
+    # (data.shape[0] - data.shape[0] % frame_rate) / frame_rate =appx= num_seconds
 
     # chunking for processes
     count = 0
@@ -103,20 +125,10 @@ if __name__ == '__main__':
         else:
             stop = start + step_sz + 1
 
-        # won't err due to os/python separation (will print on stderr)
-        # os.system('mkdir tmp/media/{}'.format(count))
-
         # write chunk to file
         var_to_file((True if count == 0 else False, start, data[start:stop, :]), "{}/{}data.bin".format(tmp, count))
 
         # listening to virtual riot figuring shit out like a boss song_title='Dreaming'
-        # todo: unsure if this is needed
-        # if count == 0:
-        #     f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin -first=true --media_dir={}/{}/{} main.py Video > ~/manim_rtvf383_final/debug/segment_{}.log 2> /dev/null\n'
-        #             .format(qual_flag, tmp, count, tmp, 'media', count, count))
-        # else:
-        #     f.write('python -m manim {} --disable_caching --music_file={}/{}data.bin --media_dir={}/{}/{} main.py Video > ~/manim_rtvf383_final/debug/segment_{}.log 2> /dev/null\n'
-        #             .format(qual_flag, tmp, count, tmp, 'media', count, count))
         count += 1
 
     # # render the video segments
@@ -131,10 +143,8 @@ if __name__ == '__main__':
     # final_video = concatenate_videoclips(clips)
     # final_video.write_videofile("final_video.mp4")
 
-    s3 = aws.client('s3')
     for source, dirs, files in os.walk(tmp):
         for filename in files:
             local_file = os.path.join(source, filename)
-            print('  Uploading ' + local_file + ' as ' + s3_bucket + '/' + local_file)
             s3.upload_file(local_file, s3_bucket, local_file)
     print("Runtime = {}".format(datetime.now() - now))
