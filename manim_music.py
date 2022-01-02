@@ -44,7 +44,7 @@ def download_audio_file_from_s3(s3_bucket_obj, s3_source_file, destination_dir):
 
 
 # constructs the video frdeom audio asynchronously
-def main(a=None, b=None):
+def main():
     now = datetime.now()
 
     # remove files before fs setup
