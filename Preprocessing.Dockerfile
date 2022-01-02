@@ -10,7 +10,7 @@ RUN apt-get install -y g++
 RUN apt-get install -y python3.9-dev
 RUN apt-get install -y ffmpeg
 RUN apt-get install -y inotify-tools
-RUN apt-get install -y git
+RUN apt-get install -y wget
 
 RUN mkdir "manim_rtvf383_final"
 WORKDIR manim_rtvf383_final
@@ -24,4 +24,4 @@ RUN source venv/bin/activate && pip install setuptools
 RUN source venv/bin/activate && pip install --upgrade wheel setuptools pip
 RUN source venv/bin/activate && pip install -r requirements_preprocess.txt
 
-CMD ['bash', 'begin_preprocess.sh']
+CMD ["bash", "begin_preprocess.sh"]
