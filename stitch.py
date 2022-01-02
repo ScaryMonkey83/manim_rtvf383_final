@@ -1,14 +1,10 @@
-# stitch segments together
-from datetime import datetime
-
 from moviepy.video.compositing.concatenate import concatenate_videoclips
 from moviepy.video.io.VideoFileClip import VideoFileClip
 import boto3 as aws
 
-from manim_music import (
-    aws_region,
-    s3_bucket
-)
+
+aws_region = 'us-east-2'
+s3_bucket = 'manim-chunks'
 
 aws_session = aws.Session()
 s3_resource = aws_session.resource('s3', aws_region)
