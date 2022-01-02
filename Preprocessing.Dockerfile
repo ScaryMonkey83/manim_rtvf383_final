@@ -16,6 +16,7 @@ RUN mkdir "manim_rtvf383_final"
 WORKDIR manim_rtvf383_final
 RUN wget https://raw.githubusercontent.com/ScaryMonkey83/manim_rtvf383_final/continuation/manim_music.py
 RUN wget https://raw.githubusercontent.com/ScaryMonkey83/manim_rtvf383_final/continuation/requirements_preprocess.txt
+RUN wget https://raw.githubusercontent.com/ScaryMonkey83/manim_rtvf383_final/continuation/scripts/begin_preprocess.sh
 
 RUN python3.9 -m venv venv
 RUN source venv/bin/activate && pip install wheel
