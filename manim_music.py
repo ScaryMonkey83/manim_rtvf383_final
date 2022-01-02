@@ -43,8 +43,8 @@ def download_audio_file_from_s3(s3_bucket_obj, s3_source_file, destination_dir):
     return sf.read('{}'.format(destination_dir))
 
 
-# constructs the video from audio asynchronously
-def main():
+# constructs the video frdeom audio asynchronously
+def main(a=None, b=None):
     now = datetime.now()
 
     # remove files before fs setup
@@ -148,3 +148,7 @@ def main():
             local_file = os.path.join(source, filename)
             s3.upload_file(local_file, s3_bucket, local_file)
     print("Runtime = {}".format(datetime.now() - now))
+
+
+if __name__ == '__main__':
+    main()
