@@ -9,7 +9,7 @@ import boto3 as aws
 
 
 # constants
-tmp = "/tmp"
+tmp = "/manim_rtvf383_final/tmp"
 audio_files = "/{}/audio".format(tmp)
 window_multiplier = 4
 frame_rate = 20
