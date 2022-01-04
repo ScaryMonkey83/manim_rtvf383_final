@@ -143,14 +143,17 @@ class Video(ThreeDScene):
         s3_resource = aws_session.resource('s3', aws_region)
         s3_object = s3_resource.Bucket(s3_bucket).Object(s3_key)
 
-        os.mkdir('tmp')  # todo: unsure if this will fail if tmp exists
+        try:
+            os.mkdir('tmp')
+        except FileExistsError:
+            pass
+
         tmp_file = f'/tmp/{job_id}'
         try:
             s3_object.download_file(tmp_file)
         except ClientError as e:
             raise e
 
-        # todo: make sure first is loaded into bin file in manim_music.py
         first, drum_idx, data = file_to_var(tmp_file)
         os.rmdir('tmp')
         #####################################################################################

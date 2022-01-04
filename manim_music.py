@@ -6,9 +6,6 @@ import json
 import soundfile as sf
 import numpy as np
 import boto3 as aws
-# todo: from moviepy.editor import VideoFileClip, concatenate_videoclips
-#       this will likely end up in a different script with its own requirements.txt
-#       to prevent dependency collision.
 
 
 # constants
@@ -112,8 +109,7 @@ def main():
     ## At this point the data is clean, idx'd by frame and needs to be chunked  ##
     ##      data: np.ndarray (n_samples / (samplerate / frame_rate), 7)         ##
     ##############################################################################
-
-    # (data.shape[0] - data.shape[0] % frame_rate) / frame_rate =appx= num_seconds
+    # info: (data.shape[0] - data.shape[0] % frame_rate) / frame_rate =appx= num_seconds
 
     # chunking for processes
     count = 0
@@ -130,18 +126,6 @@ def main():
 
         # listening to virtual riot figuring shit out like a boss song_title='Dreaming'
         count += 1
-
-    # # render the video segments
-    # os.system('bash ~/manim_rtvf383_final/multiprocess.sh ~/manim_rtvf383_final/{}/parallel_script_list.txt {}'
-    #           .format(tmp, n_cores))
-    #
-    # # stitch segments together
-    # clips = []
-    # for num in range(count):
-    #     media_dir = 'tmp/media/{}/videos/main/1080p60.0/Video.mp4'.format(num)
-    #     clips.append(VideoFileClip(media_dir))
-    # final_video = concatenate_videoclips(clips)
-    # final_video.write_videofile("final_video.mp4")
 
     for source, dirs, files in os.walk(tmp):
         for filename in files:

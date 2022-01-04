@@ -33,5 +33,4 @@ for num in range(len(dirs)):
     clips.append(VideoFileClip(media_dir))
 final_video = concatenate_videoclips(clips)
 final_video.write_videofile("final_video.mp4")
-# os.system('rm -r {}'.format(tmp))
-print('done')
+s3.upload_file("final_video.mp4", s3_bucket, "final_video.mp4")
