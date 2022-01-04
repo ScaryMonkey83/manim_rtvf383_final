@@ -9,8 +9,8 @@ import boto3 as aws
 
 
 # constants
-audio_files = "audio"
-tmp = "tmp"
+audio_files = "/manim_rtvf383_final/audio"
+tmp = "/manim_rtvf383_final/tmp"
 window_multiplier = 4
 frame_rate = 20
 
@@ -50,17 +50,17 @@ def main():
 
     # fs setup
     try:
-        os.mkdir('tmp/debug')
+        os.mkdir('/manim_rtvf383_final/debug')
     except FileExistsError:
         pass
     try:
-        os.mkdir('tmp/audio')
+        os.mkdir(audio_files)
     except FileExistsError:
         pass
-    # try:
-    #     os.mkdir('tmp')
-    # except FileExistsError:
-    #     pass
+    try:
+        os.mkdir(tmp)
+    except FileExistsError:
+        pass
 
     # a client for the s3 service
     s3 = aws.client('s3')
