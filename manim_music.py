@@ -53,10 +53,10 @@ def main():
     #     os.mkdir('/manim_rtvf383_final/debug')
     # except FileExistsError:
     #     pass
-    # try:
-    #     os.mkdir(audio_files)
-    # except FileExistsError:
-    #     pass
+    try:
+        os.mkdir(audio_files)
+    except FileExistsError:
+        pass
     try:
         os.mkdir(tmp)
     except FileExistsError:
@@ -78,13 +78,13 @@ def main():
     s3_bucket_ref = s3_resource.Bucket(s3_bucket)
 
     # load data as sample information kept in np.array
-    kick_data, samplerate = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[5]), '{}'.format(dirs[5]))
-    snare_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[6]), '{}'.format(dirs[6]))
-    tom_h_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[1]), '{}'.format(dirs[1]))
-    tom_m_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[4]), '{}'.format(dirs[4]))
-    tom_l_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[3]), '{}'.format(dirs[3]))
-    ohl_data, _           = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[2]), '{}'.format(dirs[2]))
-    ohr_data, _           = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[0]), '{}'.format(dirs[0]))
+    kick_data, samplerate = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[5]), '{}/{}'.format(tmp, dirs[5]))
+    snare_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[6]), '{}/{}'.format(tmp, dirs[6]))
+    tom_h_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[1]), '{}/{}'.format(tmp, dirs[1]))
+    tom_m_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[4]), '{}/{}'.format(tmp, dirs[4]))
+    tom_l_data, _         = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[3]), '{}/{}'.format(tmp, dirs[3]))
+    ohl_data, _           = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[2]), '{}/{}'.format(tmp, dirs[2]))
+    ohr_data, _           = download_audio_file_from_s3(s3_bucket_ref, '{}'.format(dirs[0]), '{}/{}'.format(tmp, dirs[0]))
 
     # convert from samples to db using local root mean square convolution
     kick_data  = window_rms(kick_data, samplerate / (frame_rate * window_multiplier))
