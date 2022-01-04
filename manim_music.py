@@ -44,23 +44,23 @@ def download_audio_file_from_s3(s3_bucket_obj, s3_source_file, destination_dir):
 def main():
     now = datetime.now()
 
-    # remove files before fs setup
-    os.system('rm -r debug')
-    os.system('rm -r tmp')
+    # # remove files before fs setup
+    # os.system('rm -r debug')
+    # os.system('rm -r tmp')
 
     # fs setup
     try:
-        os.mkdir('debug')
+        os.mkdir('tmp/debug')
     except FileExistsError:
         pass
     try:
-        os.mkdir('audio')
+        os.mkdir('tmp/audio')
     except FileExistsError:
         pass
-    try:
-        os.mkdir('tmp')
-    except FileExistsError:
-        pass
+    # try:
+    #     os.mkdir('tmp')
+    # except FileExistsError:
+    #     pass
 
     # a client for the s3 service
     s3 = aws.client('s3')
