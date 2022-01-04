@@ -9,8 +9,8 @@ import boto3 as aws
 
 
 # constants
-audio_files = "/manim_rtvf383_final/audio"
-tmp = "/manim_rtvf383_final/tmp"
+tmp = "/tmp"
+audio_files = "/{}/audio".format(tmp)
 window_multiplier = 4
 frame_rate = 20
 
@@ -49,14 +49,14 @@ def main():
     # os.system('rm -r tmp')
 
     # fs setup
-    try:
-        os.mkdir('/manim_rtvf383_final/debug')
-    except FileExistsError:
-        pass
-    try:
-        os.mkdir(audio_files)
-    except FileExistsError:
-        pass
+    # try:
+    #     os.mkdir('/manim_rtvf383_final/debug')
+    # except FileExistsError:
+    #     pass
+    # try:
+    #     os.mkdir(audio_files)
+    # except FileExistsError:
+    #     pass
     try:
         os.mkdir(tmp)
     except FileExistsError:

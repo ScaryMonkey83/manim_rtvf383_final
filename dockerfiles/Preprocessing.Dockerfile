@@ -13,6 +13,7 @@ RUN apt-get install -y inotify-tools
 RUN apt-get install -y wget
 
 RUN mkdir "manim_rtvf383_final"
+RUN mkdir "tmp"
 WORKDIR manim_rtvf383_final
 RUN wget https://raw.githubusercontent.com/ScaryMonkey83/manim_rtvf383_final/continuation/manim_music.py
 RUN wget https://raw.githubusercontent.com/ScaryMonkey83/manim_rtvf383_final/continuation/requirements_preprocess.txt
