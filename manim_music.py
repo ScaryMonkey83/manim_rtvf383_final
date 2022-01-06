@@ -52,10 +52,10 @@ def main():
     #     os.mkdir('/manim_rtvf383_final/debug')
     # except FileExistsError:
     #     pass
-    # try:
-    #     os.mkdir(audio_files)
-    # except FileExistsError:
-    #     pass
+    try:
+        os.mkdir(audio_files)
+    except FileExistsError:
+        pass
     # try:
     #     os.mkdir(tmp)
     # except FileExistsError:
