@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
 import pickle
-import json
 
 import soundfile as sf
 import numpy as np
@@ -9,7 +8,7 @@ import boto3 as aws
 
 
 # constants
-tmp = "/manim_rtvf383_final/tmp"
+tmp = "tmp"
 audio_files = "/{}/audio".format(tmp)
 window_multiplier = 4
 frame_rate = 20
