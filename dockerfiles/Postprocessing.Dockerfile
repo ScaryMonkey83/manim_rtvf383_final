@@ -11,6 +11,7 @@ RUN apt-get install -y python3.9-dev
 RUN apt-get install -y ffmpeg
 RUN apt-get install -y inotify-tools
 RUN apt-get install -y wget
+RUN apt-get install -y awscli
 
 RUN wget https://raw.githubusercontent.com/ScaryMonkey83/manim_rtvf383_final/continuation/stitch.py
 RUN wget https://raw.githubusercontent.com/ScaryMonkey83/manim_rtvf383_final/continuation/requirements_postprocess.txt
