@@ -6,7 +6,7 @@ import boto3
 from manim import *
 import numpy as np
 import boto3 as aws
-from botocore.exceptions import ClientError
+from botocore.exceptions import ClientError, DataNotFoundError
 
 # these are constants
 from manim_music import (
@@ -153,6 +153,8 @@ class Video(ThreeDScene):
             s3_object.download_file(tmp_file)
         except ClientError as e:
             raise e
+        except DataNotFoundError as e:
+            return
 
         first, drum_idx, data = file_to_var(tmp_file)
         os.rmdir('tmp')
