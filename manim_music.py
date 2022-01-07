@@ -41,7 +41,7 @@ def download_audio_file_from_s3(s3_bucket_obj, s3_source_file, destination_dir):
 
 
 # constructs the video frdeom audio asynchronously
-def main():
+def main(a, b):
     now = datetime.now()
     print(os.listdir())
     # # remove files before fs setup
@@ -138,7 +138,3 @@ def main():
         'statusCode': 200,
         'body': json.dumps("Runtime = {}".format(datetime.now() - now))
     }
-
-
-if __name__ == '__main__':
-    main()
