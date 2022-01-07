@@ -43,24 +43,11 @@ def download_audio_file_from_s3(s3_bucket_obj, s3_source_file, destination_dir):
 # constructs the video frdeom audio asynchronously
 def main(a, b):
     now = datetime.now()
-    print(os.listdir())
-    # # remove files before fs setup
-    # os.system('rm -r debug')
-    # os.system('rm -r tmp')
 
-    # fs setup
-    # try:
-    #     os.mkdir('/manim_rtvf383_final/debug')
-    # except FileExistsError:
-    #     pass
     try:
         os.mkdir(audio_files)
     except FileExistsError:
         pass
-    # try:
-    #     os.mkdir(tmp)
-    # except FileExistsError:
-    #     pass
 
     # a client for the s3 service
     s3 = aws.client('s3')
