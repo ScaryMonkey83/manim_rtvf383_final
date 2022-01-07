@@ -3,3 +3,6 @@
 /debug/
 /tmp/
 /media/
+
+/test*/
+/test*.py
