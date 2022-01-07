@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 import pickle
+import json
 
 import soundfile as sf
 import numpy as np
@@ -130,7 +131,10 @@ def main():
         for filename in files:
             local_file = os.path.join(source, filename)
             s3.upload_file(local_file, s3_bucket, local_file)
-    print("Runtime = {}".format(datetime.now() - now))
+    return {
+        'statusCode': 200,
+        'body': json.dumps("Runtime = {}".format(datetime.now() - now))
+    }
 
 
 if __name__ == '__main__':
