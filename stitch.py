@@ -40,7 +40,10 @@ def main(a, b):
     # build the final video with clips
     for num in range(len(dirs)):
         media_dir = 'tmp/Video_{}.mp4'.format(num)
-        clips.append(VideoFileClip(media_dir))
+        try:
+            clips.append(VideoFileClip(media_dir))
+        except OSError:
+            continue
     final_video = concatenate_videoclips(clips)
     final_video.write_videofile("tmp/final_video.mp4")
     s3.upload_file("tmp/final_video.mp4", s3_bucket, "final_video.mp4")
