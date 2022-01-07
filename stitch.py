@@ -38,7 +38,7 @@ def main(a, b):
         clips.append(VideoFileClip(media_dir))
     final_video = concatenate_videoclips(clips)
     final_video.write_videofile("tmp/final_video.mp4")
-    s3.upload_file("final_video.mp4", s3_bucket, "final_video.mp4")
+    s3.upload_file("tmp/final_video.mp4", s3_bucket, "final_video.mp4")
 
     return {
         'statusCode': 200,
