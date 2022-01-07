@@ -1,2 +1,2 @@
 source venv/bin/activate
-python stitch.py
+python -m awslambdaric stitch.main
