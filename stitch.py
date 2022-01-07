@@ -5,6 +5,7 @@ from os import system
 from moviepy.video.compositing.concatenate import concatenate_videoclips
 from moviepy.video.io.VideoFileClip import VideoFileClip
 import boto3 as aws
+from botocore.exceptions import ClientError
 
 def main(a, b):
     now = datetime.now()
@@ -31,7 +32,10 @@ def main(a, b):
     # download the final videos
     for num in range(len(dirs)):
         media_dir = 'tmp/Video_{}.mp4'.format(num)
-        s3_object.Object('videos/Video_{}.mp4'.format(num)).download_file(media_dir)
+        try:
+            s3_object.Object('videos/Video_{}.mp4'.format(num)).download_file(media_dir)
+        except ClientError as e:
+            continue
 
     # build the final video with clips
     for num in range(len(dirs)):
