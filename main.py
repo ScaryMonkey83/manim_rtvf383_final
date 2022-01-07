@@ -136,7 +136,7 @@ class Video(ThreeDScene):
         data: np.ndarray
 
         # the job id dictates which chunk this job will process
-        job_id = env.get('AWS_BATCH_ARRAY_INDEX')
+        job_id = env.get('AWS_BATCH_JOB_ARRAY_INDEX')
         s3_key = f'tmp/{job_id}data.bin'
         print(s3_key)
 
