@@ -138,6 +138,7 @@ class Video(ThreeDScene):
         # the job id dictates which chunk this job will process
         job_id = env.get('AWS_BATCH_JOB_ID')
         s3_key = f'tmp/{job_id}data.bin'
+        print(s3_key)
 
         aws_session = aws.Session()
         s3_resource = aws_session.resource('s3', aws_region)
