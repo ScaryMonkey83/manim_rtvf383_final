@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from os import system
 
 from moviepy.video.compositing.concatenate import concatenate_videoclips
 from moviepy.video.io.VideoFileClip import VideoFileClip
@@ -39,6 +40,9 @@ def main(a, b):
     final_video = concatenate_videoclips(clips)
     final_video.write_videofile("tmp/final_video.mp4")
     s3.upload_file("tmp/final_video.mp4", s3_bucket, "final_video.mp4")
+
+    # delete video chunks
+    system('aws s3 rm s3://manim-chunks/ --recursive --exclude \"*\" --include \"videos/*\"')
 
     return {
         'statusCode': 200,
