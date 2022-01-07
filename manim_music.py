@@ -127,10 +127,13 @@ def main():
         # listening to virtual riot figuring shit out like a boss song_title='Dreaming'
         count += 1
 
+    # upload each chunk to s3
     for source, dirs, files in os.walk(tmp):
         for filename in files:
             local_file = os.path.join(source, filename)
             s3.upload_file(local_file, s3_bucket, local_file)
+
+    # or else lambda assumes it fails if it doesn't return a value.
     return {
         'statusCode': 200,
         'body': json.dumps("Runtime = {}".format(datetime.now() - now))

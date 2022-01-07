@@ -20,6 +20,7 @@ RUN python3.9 -m venv venv
 RUN source venv/bin/activate && pip install wheel
 RUN source venv/bin/activate && pip install setuptools
 RUN source venv/bin/activate && pip install --upgrade wheel setuptools pip
+RUN source venv/bin/activate && pip install awslambdaric
 RUN source venv/bin/activate && pip install -r requirements_preprocess.txt
 
 CMD ["bash", "begin_preprocess.sh"]
