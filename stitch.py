@@ -37,7 +37,7 @@ def main(a, b):
         media_dir = 'tmp/Video_{}.mp4'.format(num)
         clips.append(VideoFileClip(media_dir))
     final_video = concatenate_videoclips(clips)
-    final_video.write_videofile("final_video.mp4")
+    final_video.write_videofile("tmp/final_video.mp4")
     s3.upload_file("final_video.mp4", s3_bucket, "final_video.mp4")
 
     return {
