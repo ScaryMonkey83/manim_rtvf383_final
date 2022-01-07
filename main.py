@@ -154,6 +154,7 @@ class Video(ThreeDScene):
         except ClientError as e:
             raise e
         except DataNotFoundError as e:
+            logger.error("the data was not found for job_id {}".format(job_id))
             return
 
         first, drum_idx, data = file_to_var(tmp_file)
