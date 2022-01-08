@@ -46,7 +46,7 @@ def main(a, b):
             continue
 
     final_video = concatenate_videoclips(clips)
-    final_video.write_videofile("tmp/final_video.mp4", audio=False, codec='mpeg4')  #, ffmpeg_params=["-crf", "18"])
+    final_video.write_videofile("tmp/final_video.mp4", audio=False, codec='mpeg4', ffmpeg_params=['-qp', '0'])
     final_video.close()
     s3.upload_file("tmp/final_video.mp4", s3_bucket, "final_video.mp4")
 
